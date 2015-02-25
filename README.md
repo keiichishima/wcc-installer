@@ -46,3 +46,20 @@ the detailed information of each variables, please consult the WCC
 source code.
 
 
+Play
+----
+
+Install NFS components if you don't have it.  Note that the playbook
+will overwrite the `/etc/exports` file, please be careful when using
+this.
+
+    ansible-playbook -K fileserver.yml
+
+Install the controller components.
+
+    ansible-playbook -K controller.yml
+
+Install hypervisors.
+
+    ansible-playbook -K hypervisor.yml
+
