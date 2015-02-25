@@ -1,0 +1,14 @@
+# The primary network interface
+auto {{wcc_primary_if}}
+iface {{wcc_primary_if}} inet manual 
+
+auto {{wcc_primary_bridge}}
+iface {{wcc_primary_bridge}} inet static
+	address {{wcc_primary_if_address}}
+	netmask {{wcc_primary_if_netmask}}
+	gateway {{wcc_primary_if_gateway}}
+	dns-nameservers {{wcc_primary_if_nameservers}}
+	bridge_ports {{wcc_primary_if}}
+	bridge_stp off
+	bridge_fd 0
+	bridge_maxwait 0

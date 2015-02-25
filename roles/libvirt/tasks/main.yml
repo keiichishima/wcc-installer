@@ -1,0 +1,51 @@
+- name: Install libvirt-bin
+  apt: name=libvirt-bin
+
+- name: Create a directory for a libvirt certificate authority file
+  file: path=/etc/pki/CA
+    state=directory
+    owner=libvirt-qemu
+    group=libvirtd
+
+- name: Install the certificate authority file
+  copy: src=cacert.pem dest=/etc/pki/CA/cacert.pem
+    owner=libvirt-qemu
+    group=libvirtd
+    mode=0644
+
+- name: Create directories for certificate and key files
+  file: path=/etc/pki/{{item}}
+    state=directory
+    owner=libvirt-qemu
+    group=libvirtd
+    mode=0755
+  with_items:
+    - libvirt
+    - libvirt/private
+
+- name: Install the certificate file
+  copy: src={{ansible_fqdn}}.{{item}} dest=/etc/pki/libvirt/{{item}}
+    owner=libvirt-qemu
+    group=libvirtd
+    mode=0644
+  with_items:
+    - servercert.pem
+    - clientcert.pem
+
+- name: Install the private key file
+  copy: src={{ansible_fqdn}}.{{item}} dest=/etc/pki/libvirt/private/{{item}}
+    owner=libvirt-qemu
+    group=libvirtd
+    mode=0640
+  with_items:
+    - serverkey.pem
+    - clientkey.pem
+
+- name: Update the options of libvirtd
+  copy: src=libvirt-bin dest=/etc/default/libvirt-bin
+    owner=root
+    group=root
+    mode=644
+
+- name: Restart libvirt-bin
+  service: name=libvirt-bin state=restarted

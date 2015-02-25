@@ -1,0 +1,6 @@
+---
+- hosts: fileserver
+  sudo: yes
+  roles:
+    - apt-upgrade
+    - nfs-server

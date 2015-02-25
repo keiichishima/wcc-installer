@@ -1,0 +1,99 @@
+[controller]
+#
+# You need to replace the host name
+#
+# wcc.iijlab.net
+wcc-test.iijlab.net
+
+[hypervisors]
+#
+# You need to replace the host name
+#
+# hv00.iijlab.net wcc_primary_if_address=10.0.0.10
+# hv01.iijlab.net wcc_primary_if_address=10.0.0.11
+wcc-hv-test.iijlab.net wcc_primary_if_address=192.168.122.65
+
+[fileserver]
+#
+# You need to replace the host name
+#
+# nfs.iijlab.net
+wcc-test.iijlab.net
+
+[all]
+#
+# You need list all the host names defined above
+#
+wcc-test.iijlab.net
+wcc-hv-test.iijlab.net
+
+[all:vars]
+#
+# You need to define the below two variables
+#
+wcc_controller=wcc-test.iijlab.net
+wcc_fileserver=wcc-test.iijlab.net
+#
+# You can change the image directory names if you want
+#
+wcc_var_nfs_path=/var/wcc
+wcc_iso_image_dir=iso
+wcc_image_dir=images
+wcc_diff_image_dir=diff-images
+wcc_var_local_path=/var/wcc-local
+wcc_base_image_dir=base-images
+
+[controller:vars]
+#
+# The installation path of WCC
+#
+wcc_path=/var/www/WCC/release
+#
+# Replace with more meaningful values
+#
+wcc_secret_token=CHANGE_ME_CHANGE_ME_CHANGE_ME
+wcc_secret_key_base=CHANGE_ME_CHANGE_ME_CHANGE_ME
+wcc_action_mailer_delivery_method=:sendmail
+wcc_action_mailer_hostname=CHANGE_ME_HOSTNAME
+wcc_devise_mailer_sender=CHANGE_ME_USER@CHANGE_ME_DOMAIN
+wcc_devise_secret_key=CHANGE_ME_CHANGE_ME_CHANGE_ME
+wcc_default_storage_location=1
+wcc_upload_path=/srv/ftp/
+wcc_storage_node=wcc-test.iijlab.net
+wcc_storage_path=/var/wcc/images/
+#
+# You need to define your network interface
+#
+wcc_primary_if=eth0
+wcc_primary_bridge=br0
+wcc_primary_if_address=192.168.122.64
+wcc_primary_if_netmask=255.255.255.0
+wcc_primary_if_gateway=192.168.122.1
+wcc_primary_if_nameservers=192.168.122.1
+#
+# If you have a secondary interface, define these too
+#
+#wcc_secondary_if=eth1
+#wcc_secondary_bridge=br1
+#wcc_secondary_if_address=10.0.0.10
+#wcc_secondary_if_netmask=255.255.255.0
+#wcc_secondary_if_gateway=10.0.0.1
+
+[fileserver:vars]
+#
+# The network address for nfs export
+#
+wcc_nfs_network=192.168.122.0/24
+
+[hypervisors:vars]
+#
+# The common network information of hypervisors
+#
+wcc_primary_if=eth0
+wcc_primary_bridge=br0
+wcc_primary_if_netmask=255.255.255.0
+wcc_primary_if_gateway=192.168.122.1
+wcc_primary_if_nameservers=192.168.122.1
+
+[wcc-hv-test.iijlab.net:vars]
+

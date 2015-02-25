@@ -1,0 +1,2 @@
+- name: Install kvm
+  apt: name=kvm

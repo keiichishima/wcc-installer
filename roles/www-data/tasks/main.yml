@@ -1,0 +1,36 @@
+- name: Create a home directory for www-data
+  file: path=/home/www-data
+    state=directory
+    owner=www-data
+    group=www-data
+    mode=775
+
+- name: Update the password entry of www-data
+  user: name=www-data
+    home=/home/www-data
+    shell=/bin/bash
+    groups=libvirtd
+
+- name: Create the .ssh directory for www-data
+  sudo_user: www-data
+  file: path=/home/www-data/.ssh
+    state=directory
+    owner=www-data
+    group=www-data
+    mode=700
+
+- name: Transfer the ssh secret key of www-data to the controller node
+  sudo_user: www-data
+  copy: src=id_rsa dest=/home/www-data/.ssh/id_rsa
+    owner=www-data
+    group=www-data
+    mode=600
+  when: ansible_fqdn == wcc_controller
+
+- name: Transfer the public key of www-data to the clients
+  sudo_user: www-data
+  copy: src=id_rsa.pub dest=/home/www-data/.ssh/authorized_keys
+    owner=www-data
+    group=www-data
+    mode=660
+  when: ansible_fqdn != wcc_controller

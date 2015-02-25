@@ -1,0 +1,14 @@
+- name: Create a main interface config file
+  copy: src=interfaces dest=/etc/network/interfaces
+    mode=644
+
+- name: Generate a primary network interface config
+  template: src=primary-interface.j2
+    dest=/etc/network/interfaces.d/primary-interface
+    mode=644
+
+- name: Generate a secondary network interface config
+  template: src=primary-interface.j2
+    dest=/etc/network/interfaces.d/primary-interface
+    mode=644
+  when: wcc_secondary_if is defined

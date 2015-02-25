@@ -1,0 +1,39 @@
+- name: Install nfs-kernel-server
+  apt: name=nfs-kernel-server
+
+- name: Create a NFS root directory to export
+  file: path={{wcc_var_nfs_path}}
+    state=directory
+    owner=www-data
+    group=www-data
+    mode=775
+
+- name: Create the wcc_iso_image_dir directory
+  file: path={{wcc_var_nfs_path}}/{{wcc_iso_image_dir}}
+    state=directory
+    owner=www-data
+    group=www-data
+    mode=775
+
+- name: Create the wcc_image_dir directory
+  file: path={{wcc_var_nfs_path}}/{{wcc_image_dir}}
+    state=directory
+    owner=www-data
+    group=www-data
+    mode=775
+
+- name: Create the wcc_diff_image_dir directory
+  file: path={{wcc_var_nfs_path}}/{{wcc_diff_image_dir}}
+    state=directory
+    owner=www-data
+    group=www-data
+    mode=775
+
+- name: Configure the export directories' parameters
+  template: src=exports.j2 dest=/etc/exports
+
+- name: Export the directories
+  command: exportfs -ar
+
+- name: Restart NFS kernel server
+  service: name=nfs-kernel-server state=restarted

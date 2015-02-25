@@ -1,0 +1,12 @@
+---
+- hosts: hypervisors
+  sudo: yes
+  roles:
+    - apt-upgrade
+    - kvm
+    - libvirt
+    - www-data
+    - network
+    - nfs-client
+    - wcc-hypervisor
+    - reboot

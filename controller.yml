@@ -1,0 +1,12 @@
+---
+- hosts: controller
+  sudo: yes
+  roles:
+    - apt-upgrade
+    - qemu-utils
+    - libvirt
+    - www-data
+    - wcc
+    - network
+    - nfs-client
+    - reboot

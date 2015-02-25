@@ -1,0 +1,123 @@
+- name: Install support software
+  apt: name={{ item }}
+  with_items:
+    - git
+    - sqlite3
+    - imagemagick
+
+- name: Install web server
+  apt: name={{item}}
+  with_items:
+    - apache2
+    - libapache2-mod-passenger
+    - libapache2-mod-xsendfile
+
+- name: Stop web server
+  service: name=apache2 state=stopped
+
+- name: Install httpd.conf files
+  template: src={{item}}.j2 dest=/etc/apache2/sites-available/{{item}}
+  with_items:
+    - 000-default.conf
+    - default-ssl.conf
+
+- name: Install a mod_xsendfile config file
+  template: src=xsendfile.conf.j2 dest=/etc/apache2/mods-available/xsendfile.conf
+
+- name: Install ruby runtime and dev requirements
+  apt: name={{item}}
+  with_items:
+    - ruby-bundler
+    - libsqlite3-dev
+    - libmysqlclient-dev
+    - libssl-dev
+    - libvirt-dev
+
+- name: Install WCC companion software
+  apt: name={{ item }}
+  with_items:
+    - postfix
+    - proftpd
+
+- name: Clone WCC
+  git: repo=git://wcc-git.wide.ad.jp/WCC dest={{wcc_path}}
+
+- name: Fix owner and group of the WCC directory
+  file: path={{wcc_path}}
+    owner=www-data
+    group=www-data
+    recurse=yes
+
+- name: Install WCC ruby bundles
+  sudo_user: www-data
+  script: install-bundle.sh {{wcc_path}}
+
+- name: Configure WCC
+  sudo_user: www-data
+  template: src={{item}}.j2 dest={{wcc_path}}/config/initializers/{{item}}
+  with_items:
+    - secret_token.rb
+    - action_mailer.rb
+    - devise.rb
+    - envs.rb
+
+- name: Configure vncproxy
+  sudo_user: www-data
+  template: src=config.yml.j2 dest={{wcc_path}}/config/config.yml
+
+- name: Do rake
+  sudo_user: www-data
+  script: rake.sh {{wcc_path}}
+
+- name: Copy the HV status check script
+  sudo_user: www-data
+  copy: src=check_hv.rb dest={{wcc_path}}/script/check_hv.rb
+    mode=755
+
+- name: Install the HV status checking job
+  cron: name="Run check_hv.rb"
+    user=www-data
+    minute="*/7"
+    job="(export set RAILS_ENV=production; cd {{wcc_path}}; /usr/bin/bundle exec rails runner script/check_hv.rb > /dev/null 2>&1)"
+
+- name: Install the IPv4 addr status checking job
+  cron: name="Run check_vmaddr.rb"
+    user=www-data 
+    minute="*/5"
+    job="(export set RAILS_ENV=production; cd {{wcc_path}}; /usr/bin/bundle exec rails runner script/check_vmaddr.rb > /dev/null 2>&1)"
+
+- name: Delete existing storage entries
+  sudo_user: www-data
+  command: sqlite3 {{wcc_path}}/db/production.sqlite3 'delete from storage_locations'
+
+- name: Configure the default storage entry
+  sudo_user: www-data
+  command: sqlite3 {{wcc_path}}/db/production.sqlite3 'insert into storage_locations (id, name, hostname) values ({{wcc_default_storage_location}}, "{{wcc_storage_path}}", "{{wcc_storage_node}}")'
+
+- name: Configure ProFTPd
+  copy: src=proftpd-wcc.conf dest=/etc/proftpd/conf.d/proftpd-wcc.conf
+    mode=644
+
+- name: Fix the permission of the FTP directory
+  file: path={{wcc_upload_path}}
+    group=www-data
+    mode=775
+
+- name: Restart ProFTPd
+  service: name=proftpd state=restarted
+
+- name: Enable apache2 sites
+  command: a2ensite {{item}}
+  with_items:
+    - 000-default
+    - default-ssl
+
+- name: Enable apache2 modules
+  command: a2enmod {{item}}
+  with_items:
+    - ssl
+    - passenger
+    - xsendfile
+
+- name: Restart apache2
+  service: name=apache2 state=restarted

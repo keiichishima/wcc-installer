@@ -1,0 +1,13 @@
+- name: Create a local WCC image directory
+  file: path={{wcc_var_local_path}}
+    state=directory
+    owner=www-data
+    group=www-data
+    mode=775
+
+- name: Create the wcc_base_image_dir directory
+  file: path={{wcc_var_local_path}}/{{wcc_base_image_dir}}
+    state=directory
+    owner=www-data
+    group=www-data
+    mode=775

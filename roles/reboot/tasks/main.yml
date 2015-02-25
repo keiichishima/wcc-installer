@@ -1,0 +1,2 @@
+- name: Reboot
+  command: shutdown -r now "Rebooted by Ansible"

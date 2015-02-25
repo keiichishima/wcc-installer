@@ -1,0 +1,19 @@
+- name: Install nfs-common
+  apt: name=nfs-common
+
+- name: Create a local directory to mount a NFS server directory
+  file: path={{wcc_var_nfs_path}}
+    state=directory
+    owner=www-data
+    group=www-data
+    mode=775
+
+- name: Mount the NFS server directory
+  mount: name={{wcc_var_nfs_path}}
+    state=mounted
+    src={{wcc_fileserver}}:{{wcc_var_nfs_path}}
+    fstype=nfs
+    opts="_netdev,rw,bg,hard,intr"
+    dump=0
+    passno=0
+  when: ansible_fqdn != wcc_fileserver
