@@ -94,6 +94,3 @@ wcc_primary_bridge=br0
 wcc_primary_if_netmask=255.255.255.0
 wcc_primary_if_gateway=192.168.122.1
 wcc_primary_if_nameservers=192.168.122.1
-
-[wcc-hv-test.iijlab.net:vars]
-
