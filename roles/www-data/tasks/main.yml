@@ -9,7 +9,12 @@
   user: name=www-data
     home=/home/www-data
     shell=/bin/bash
+    groups=libvirtd
+
+- name: Add www-data to ssl-certs group if controller
+  user: name=www-data
     groups=libvirtd,ssl-certs
+  when: ansible_fqdn == wcc_controller
 
 - name: Create the .ssh directory for www-data
   sudo_user: www-data
