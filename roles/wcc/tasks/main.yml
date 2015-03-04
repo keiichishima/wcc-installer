@@ -118,6 +118,7 @@
     - ssl
     - passenger
     - xsendfile
+    - rewrite
 
 - name: Restart apache2
   service: name=apache2 state=restarted

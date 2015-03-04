@@ -6,7 +6,7 @@
     - kvm
     - libvirt
     - www-data
+    - wcc-hypervisor
     - network
     - nfs-client
-    - wcc-hypervisor
     - reboot

@@ -1,0 +1,7 @@
+# The primary network interface
+auto {{wcc_primary_if}}
+iface {{wcc_primary_if}} inet static
+	address {{wcc_primary_if_address}}
+	netmask {{wcc_primary_if_netmask}}
+	gateway {{wcc_primary_if_gateway}}
+	dns-nameservers {{wcc_primary_if_nameservers}}

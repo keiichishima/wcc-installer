@@ -6,9 +6,22 @@
   template: src=primary-interface.j2
     dest=/etc/network/interfaces.d/primary-interface
     mode=644
+  when: wcc_primary_bridge is defined
 
-- name: Generate a secondary network interface config
-  template: src=primary-interface.j2
+- name: Generate a primary network interface config when no bridging
+  template: src=primary-interface-no-bridge.j2
     dest=/etc/network/interfaces.d/primary-interface
     mode=644
-  when: wcc_secondary_if is defined
+  when: wcc_primary_bridge is not defined
+
+- name: Generate a secondary network interface config
+  template: src=secondary-interface.j2
+    dest=/etc/network/interfaces.d/secondary-interface
+    mode=644
+  when: wcc_secondary_if is defined and wcc_secondary_bridge is defined
+
+- name: Generate a secondary network interface config when no bridging
+  template: src=secondary-interface-no-bridge.j2
+    dest=/etc/network/interfaces.d/secondary-interface
+    mode=644
+  when: wcc_secondary_if is defined and wcc_secondary_bridge is not defined

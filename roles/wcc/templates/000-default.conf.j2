@@ -11,6 +11,11 @@
 	ServerAdmin www-data@{{ansible_fqdn}}
 	DocumentRoot {{wcc_path}}/public
 
+	<ifModule mod_rewrite.c>
+		RewriteEngine On
+		RewriteCond %{HTTPS} off
+		RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URL} [R,L]
+	</ifModule>
 	# Available loglevels: trace8, ..., trace1, debug, info, notice, warn,
 	# error, crit, alert, emerg.
 	# It is also possible to configure the loglevel for particular

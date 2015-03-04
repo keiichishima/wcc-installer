@@ -9,7 +9,7 @@
   user: name=www-data
     home=/home/www-data
     shell=/bin/bash
-    groups=libvirtd
+    groups=libvirtd,ssl-certs
 
 - name: Create the .ssh directory for www-data
   sudo_user: www-data

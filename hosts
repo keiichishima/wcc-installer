@@ -37,7 +37,7 @@ wcc_fileserver=wcc-test.iijlab.net
 # You can change the image directory names if you want
 #
 wcc_var_nfs_path=/var/wcc
-wcc_iso_image_dir=iso
+wcc_iso_image_dir=iso-images
 wcc_image_dir=images
 wcc_diff_image_dir=diff-images
 wcc_var_local_path=/var/wcc-local
@@ -77,7 +77,6 @@ wcc_primary_if_nameservers=192.168.122.1
 #wcc_secondary_bridge=br1
 #wcc_secondary_if_address=10.0.0.10
 #wcc_secondary_if_netmask=255.255.255.0
-#wcc_secondary_if_gateway=10.0.0.1
 
 [fileserver:vars]
 #
