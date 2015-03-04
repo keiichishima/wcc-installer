@@ -14,7 +14,7 @@
 	<ifModule mod_rewrite.c>
 		RewriteEngine On
 		RewriteCond %{HTTPS} off
-		RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URL} [R,L]
+		RewriteRule ^(.*)?$ https://%{HTTP_HOST}$1 [L,R]
 	</ifModule>
 
 	# Available loglevels: trace8, ..., trace1, debug, info, notice, warn,
