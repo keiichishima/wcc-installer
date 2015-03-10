@@ -11,13 +11,9 @@
     shell=/bin/bash
     groups=libvirtd
 
-- name: Install apache if controller
-  apt: name=apache2
-  when: ansible_fqdn == wcc_controller
-
 - name: Add www-data to ssl-certs group if controller
   user: name=www-data
-    groups=libvirtd,ssl-certs
+    groups=libvirtd,ssl-cert
   when: ansible_fqdn == wcc_controller
 
 - name: Create the .ssh directory for www-data
